@@ -1,4 +1,4 @@
-# Applying AI-Agents in Unity (C1TAI1) String 2026
+# Applying AI-Agents in Unity (C1TAI1) Spring 2026
 This is the repository for the Applying AI-Agents in Unity (Spring 2026) course at Borås University
 
 The course schedule can be found on [Kronox](https://www.google.com) and the course material can be found on [Canvas](https://www.google.com).
