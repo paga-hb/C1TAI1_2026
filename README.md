@@ -39,10 +39,10 @@ When you have installed the software above, open a terminal and clone the GitHub
 
 - `git clone https://github.com/paga-hb/C1TAI1_2026.git agents`
 - `cd agents`
-- `conda create -y -p ./.conda python=3.6`
+- `conda create -y -p ./.conda python=3.12`
 - `conda activate ./.conda`
 - `python -m pip install --upgrade pip`
-- `pip install ipykernel jupyter`
+- `pip install ipykernel jupyter numpy`
 
 ## Open the First Workshop Notebook
 
@@ -50,6 +50,6 @@ Finally, make sure you are in the `agents` folder in your terminal, and open the
 
 - `code -g notebooks/mdp_and_rl_theory.ipynb:0 .`
 
-When the notebook opens in VSCode, click the text `Select Kernel` (in the top-right of the notebook), and choose `Python Environments... => conda (Python 3.6.13) .conda/bin/python`.
+When the notebook opens in VSCode, click the text `Select Kernel` (in the top-right of the notebook), and choose `Python Environments... => conda (Python 3.12) .conda/bin/python`.
 
 Now you can follow the instructions in the notebook.
