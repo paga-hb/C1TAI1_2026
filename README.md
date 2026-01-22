@@ -1,7 +1,7 @@
 # Applying AI-Agents in Unity (C1TAI1) Spring 2026
 This is the repository for the Applying AI-Agents in Unity (Spring 2026) course at Borås University
 
-The course schedule can be found on [Kronox](https://www.google.com) and the course material can be found on [Canvas](https://www.google.com).
+The course schedule can be found on [Kronox](https://schema.hb.se/setup/jsp/Schema.jsp?startDatum=2026-01-19&intervallTyp=m&intervallAntal=12&sprak=SV&sokMedAND=true&forklaringar=true&resurser=k.C1TAI1-20261-I23V6-) and the course material can be found on [Canvas](https://hb.instructure.com/courses/11422).
 
 ## Delopment Environment Setup
 
@@ -42,7 +42,7 @@ When you have installed the software above, open a terminal and clone the GitHub
 - `conda create -y -p ./.conda python=3.6`
 - `conda activate ./.conda`
 - `python -m pip install --upgrade pip`
-- `pip install ipykernel jupyter pylance`
+- `pip install ipykernel jupyter`
 
 ## Open the First Workshop Notebook
 
