@@ -33,20 +33,16 @@ class ValueIterationAgent(ValueEstimationAgent):
         # Write value iteration code here
         "*** YOUR CODE HERE ***"
 
-        #mdp.getStates() returns a list of all states.
-        #mdp.getPossibleActions(state) returns a list of valid actions in that state.
-        #mdp.getTransitionStatesAndProbs(state, action) returns pairs (nextState, probability), where probability is the chance (probability) of ending up in nextState.
-        #mdp.getReward(state, action, nextState) returns the immediate reward when action is performed in state and the agent ends up in the nextState.
-        #mdp.isTerminal(state) returns True if the state is a terminal state, else False.
-
-        for i in range(iterations):
+        for iteration in range(iterations):
             values = self.values.copy()
-            for next_status in self.mdp.getStates():
+            # Loop over all states and update each state based on the Bellman equation
+            for state in self.mdp.getStates():
                 q_values = []
-                if not self.mdp.isTerminal(next_status):
-                    for a in self.mdp.getPossibleActions(next_status):
-                        q_values.append(self.getQValue(next_status, a))
-                    values[next_status] = max(q_values)
+                if not self.mdp.isTerminal(state):
+                    # V(s) = max_a Q(s,a) = max_a sum_{s'} P(s'|s,a) [R(s,a,s') + gamma * V(s')]
+                    for action in self.mdp.getPossibleActions(state):
+                        q_values.append(self.getQValue(state, action)) # Q(s,a)
+                    values[state] = max(q_values) # V(s) = max_a Q(s,a)
             self.values = values
 
     def getValue(self, state):
@@ -64,15 +60,15 @@ class ValueIterationAgent(ValueEstimationAgent):
         "*** YOUR CODE HERE ***"
         #util.raiseNotDefined()
 
-        res = 0
         gamma = self.discount
+        q_value = 0
 
+        # Q(s,a) = sum_{s'} P(s'|s,a) [R(s,a,s') + gamma * V(s')]
         for next_state, prob in self.mdp.getTransitionStatesAndProbs(state, action):
             r = self.mdp.getReward(state, action, next_state)
             v = self.getValue(next_state)
-            res = res + prob * (r + gamma * v)
-
-        return res
+            q_value += prob * (r + gamma * v) # Q(s,a) += P(s'|s,a) [R(s,a,s') + gamma * V(s')]
+        return q_value
 
 
     def computeActionFromValues(self, state):
@@ -89,11 +85,11 @@ class ValueIterationAgent(ValueEstimationAgent):
 
         values = util.Counter()
 
+        # PI(s) = a* = argmax_a Q(s,a)
         for action in self.mdp.getPossibleActions(state):
-            values[action] = self.getQValue(state, action)
-
+            values[action] = self.getQValue(state, action) # Q(s,a)
         try:
-            return values.argMax()
+            return values.argMax() # argmax_a Q(s,a)
         except Exception as e:
             return None
 

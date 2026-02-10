@@ -30,6 +30,8 @@ class QLearningAgent(ReinforcementAgent):
 
         "*** YOUR CODE HERE ***"
 
+        # Key will be (state, action) pairs,
+        # Values will be Q-values,
         self.q_values = util.Counter()
 
     def getQValue(self, state, action):
@@ -59,10 +61,7 @@ class QLearningAgent(ReinforcementAgent):
             for action in self.getLegalActions(state)
         ]
 
-        if len(values) == 0:
-            return 0.0
-        else:
-            return max(values)
+        return 0.0 if len(values) == 0 else max(values)
 
     def computeActionFromQValues(self, state):
         """
@@ -81,7 +80,7 @@ class QLearningAgent(ReinforcementAgent):
             (action, self.getQValue(state, action))
             for action in legalActions
         ]
-
+        
         action, _ = max(actions_values, key=lambda x: x[1])
         return action
 
@@ -104,18 +103,13 @@ class QLearningAgent(ReinforcementAgent):
         "*** YOUR CODE HERE ***"
         #util.raiseNotDefined()
 
-        # Pick Action
-        legalActions = self.getLegalActions(state)
-        action = None
-
         if len(legalActions) > 0:
             if util.flipCoin(self.epsilon):
                 action = random.choice(legalActions)
             else:
                 action = self.getPolicy(state)
         return action
-
-        return action
+    
 
     def update(self, state, action, nextState, reward):
         """
@@ -130,8 +124,13 @@ class QLearningAgent(ReinforcementAgent):
         #util.raiseNotDefined()
 
         gamma = self.discount
-        self.q_values[(state, action)] = (1 - self.alpha) * self.getQValue(state, action) + \
-                                         self.alpha * (reward + gamma * self.getValue(nextState))
+
+        # Note: V(s') = max_{a'} Q(s',a') so the updates below are equivalent:
+        # (1) Q(s,a) = (1-alpha) * Q(s,a) + alpha * (reward + gamma * V(s'))
+        # (2) Q(s,a) = (1-alpha) * Q(s,a) + alpha * (reward + gamma * max_{a'} Q(s',a'))
+        self.q_values[(state, action)] = \
+             (1 - self.alpha) * self.getQValue(state, action) + \
+             self.alpha * (reward + gamma * self.getValue(nextState))
 
     def getPolicy(self, state):
         return self.computeActionFromQValues(state)
@@ -199,7 +198,7 @@ class ApproximateQAgent(PacmanQAgent):
         features = self.featExtractor.getFeatures(state, action)
         sum_q = 0.0
         for i in features:
-            sum_q = sum_q + self.weights[i] * features[i]
+            sum_q += self.weights[i] * features[i]
         return sum_q
 
     def update(self, state, action, nextState, reward):
@@ -210,11 +209,11 @@ class ApproximateQAgent(PacmanQAgent):
         #util.raiseNotDefined()
 
         gamma = self.discount
-        correction = (reward + gamma * self.getValue(nextState)) - self.getQValue(state, action)
+        difference = (reward + gamma * self.getValue(nextState)) - self.getQValue(state, action)
 
         features = self.featExtractor.getFeatures(state, action)
         for i in features:
-            self.weights[i] = self.weights[i] + self.alpha * correction * features[i]
+            self.weights[i] = self.weights[i] + self.alpha * difference * features[i]
 
     def final(self, state):
         "Called at the end of each game."
